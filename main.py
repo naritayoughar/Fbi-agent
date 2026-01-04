@@ -59,4 +59,4 @@ async def reset(ctx, member: discord.Member):
     await ctx.send("Record cleared | تم مسح السجل")
 
 # ⛔ ضع التوكن هنا بنفسك ولا ترسله لأي أحد
-bot.run("8866461766385655")
+bot.run("0")
