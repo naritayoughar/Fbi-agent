@@ -96,4 +96,4 @@ if not TOKEN:
     print("ضع التوكن في Environment Variable باسم DISCORD_TOKEN")
     exit(1)
 
-bot.run(DISCORD_TOKEN)
+bot.run(TOKEN)
