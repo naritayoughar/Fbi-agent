@@ -1,23 +1,32 @@
 {
-  "keywords": [
-    "كسمك","كسختك","كسك","كس","زب","زبك","طيزك","كلخرا","كل خرا","كل زق","زق",
-    "بخش","كس امك","كس اختك","نيكك","نيك","منيك","منتاك","منيوك","عرص","عرصا",
-    "شرموطة","كحبة","قحبة","عير","اير","انيك","مص","امصصك","بزاز","بز","تيز",
-    "تيزك","سحاق","لواط","لوطي","لوطيين","لواطة","مخانيث","مخنث",
-    "fuck","blowjob","dick","tits","boobs","nude","gay","lesbian","lesbians","femboy","ابن مرا"
-  ],
-  "audio_urls": [
-    "https://raw.githubusercontent.com/naritayoughar/Fbi-agent/main/audio/warn_01.mp3",
-    "https://raw.githubusercontent.com/naritayoughar/Fbi-agent/main/audio/warn_02.mp3",
-    "https://raw.githubusercontent.com/naritayoughar/Fbi-agent/main/audio/warn_03.mp3",
-    "https://raw.githubusercontent.com/naritayoughar/Fbi-agent/main/audio/warn_04.mp3",
-    "https://raw.githubusercontent.com/naritayoughar/Fbi-agent/main/audio/warn_05.mp3",
-    "https://raw.githubusercontent.com/naritayoughar/Fbi-agent/main/audio/warn_06.mp3",
-    "https://raw.githubusercontent.com/naritayoughar/Fbi-agent/main/audio/warn_07.mp3",
-    "https://raw.githubusercontent.com/naritayoughar/Fbi-agent/main/audio/warn_08.mp3"
-  ],
+  "security_channel": "security-files",
+
   "penalties": [
-    600, 1800, 3600, 10800, 21600, "BAN"
+    600,
+    1800,
+    3600,
+    10800,
+    21600,
+    "BAN"
   ],
-  "security_channel": "security-files"
+
+  "audio_files": [
+    "warn1.mp3",
+    "warn2.mp3",
+    "warn3.mp3",
+    "warn4.mp3",
+    "warn5.mp3",
+    "warn6.mp3",
+    "warn7.mp3",
+    "warn8.mp3"
+  ],
+
+  "keywords": [
+    "كسمك","كسختك","كسك","كس","زب","زبك","طيزك","كلخرا","كل خرا","كل زق",
+    "زق","بخش","كس امك","كس اختك","نيكك","نيك","منيك","منتاك","منيوك",
+    "عرص","عرصا","شرموطة","كحبة","قحبة","عير","اير","انيك","مص","امصصك",
+    "بزاز","بز","تيز","تيزك","سحاق","لواط","لوطي","لوطيين","لواطة",
+    "مخانيث","مخنث","fuck","blowjob","dick","tits","boobs","nude",
+    "gay","lesbian","lesbians","femboy","ابن مرا"
+  ]
 }
