@@ -1,70 +1,90 @@
 import os
-import discord
-import random
 import json
-import requests
-from discord.ext import commands
+import random
 from datetime import timedelta
 
-# ================= LOAD CONFIG =================
-CONFIG_URL = "https://raw.githubusercontent.com/naritayoughar/Fbi-agent/main/config.json"
+import discord
+from discord.ext import commands
 
+# ================= LOAD CONFIG =================
 try:
-    response = requests.get(CONFIG_URL, timeout=10)
-    response.raise_for_status()
-    CFG = response.json()
-    print("CONFIG LOADED")
+    with open("config.json", "r", encoding="utf-8") as f:
+        CFG = json.load(f)
 except Exception as e:
-    print("ERROR loading config:", e)
+    print(f"ERROR loading config: {e}")
     exit(1)
 
-# ================= DISCORD SETUP =================
-intents = discord.Intents.default()
-intents.message_content = True
-intents.members = True
-
+# ================= BOT SETUP =================
+intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # ================= MEMORY DB =================
-USER_STRIKES = {}
+STRIKES = {}
 
-def get_strikes(user_id):
-    return USER_STRIKES.get(user_id, 0)
+def get_strikes(uid):
+    return STRIKES.get(uid, 0)
 
-def add_strike(user_id):
-    USER_STRIKES[user_id] = get_strikes(user_id) + 1
+def add_strike(uid):
+    STRIKES[uid] = get_strikes(uid) + 1
+    return STRIKES[uid]
+
+def clear_strikes(uid):
+    STRIKES.pop(uid, None)
+
+# ================= PENALTY FORMAT =================
+def format_penalty(p):
+    if p == "BAN":
+        return "Ban نهائي"
+    s = int(p)
+    if s < 60:
+        return f"{s} ثواني"
+    elif s < 3600:
+        return f"{s // 60} دقيقة"
+    elif s < 86400:
+        return f"{s // 3600} ساعة"
+    else:
+        return f"{s // 86400} يوم"
 
 # ================= EVENTS =================
 @bot.event
 async def on_ready():
-    print(f"FBI AGENT ONLINE | Logged as {bot.user}")
+    print("FBI AGENT | ONLINE")
 
 @bot.event
 async def on_message(message):
     if message.author.bot or not message.guild:
         return
 
-    await bot.process_commands(message)
-
     content = message.content.lower()
 
     if any(word in content for word in CFG["keywords"]):
-        add_strike(message.author.id)
-        strikes = get_strikes(message.author.id)
+        strikes = add_strike(message.author.id)
 
-        penalty = CFG["penalties"][min(strikes - 1, len(CFG["penalties"]) - 1)]
-        audio_path = random.choice(CFG["audio_files"])
+        penalty = CFG["penalties"][min(
+            strikes - 1, len(CFG["penalties"]) - 1
+        )]
 
-        # Send warning + audio
-        try:
+        penalty_text = format_penalty(penalty)
+
+        # ===== AUDIO =====
+        audio_file = random.choice(CFG["audio_files"])
+        audio_path = os.path.join("audio", audio_file)
+
+        if os.path.exists(audio_path):
             await message.channel.send(
-                f"⚠️ مخالفة مسجلة\nعدد المخالفات: {strikes}",
+                content=(
+                    "⚠️ Violation Detected | مخالفة\n"
+                    f"Strikes: {strikes}\n"
+                    f"Penalty: {penalty_text}"
+                ),
                 file=discord.File(audio_path)
             )
-        except Exception as e:
-            print("Audio send error:", e)
+        else:
+            await message.channel.send(
+                f"⚠️ Violation | Penalty: {penalty_text}"
+            )
 
-        # Log to security channel
+        # ===== SECURITY REPORT =====
         sec_channel = discord.utils.get(
             message.guild.text_channels,
             name=CFG["security_channel"]
@@ -75,13 +95,14 @@ async def on_message(message):
                 f"""🚨 FBI AGENT REPORT
 👤 User: {message.author}
 🆔 ID: {message.author.id}
+🏷️ Roles: {[r.name for r in message.author.roles if r.name != '@everyone']}
 💬 Message: {message.content}
 🔢 Strikes: {strikes}
-⚖️ Penalty: {penalty}
+⚖️ Penalty: {penalty_text}
 """
             )
 
-        # Apply punishment
+        # ===== APPLY PUNISHMENT =====
         try:
             if penalty == "BAN":
                 await message.guild.ban(
@@ -94,18 +115,21 @@ async def on_message(message):
                     reason="Auto moderation | FBI AGENT"
                 )
         except Exception as e:
-            print("Punishment error:", e)
+            print(f"Punishment error: {e}")
+
+    await bot.process_commands(message)
 
 # ================= COMMANDS =================
-@bot.command()
+@bot.command(name="reset")
 @commands.has_permissions(administrator=True)
-async def reset(ctx, member: discord.Member):
-    USER_STRIKES.pop(member.id, None)
-    await ctx.send(f"✅ تم مسح سجل {member.mention}")
+async def reset_user(ctx, member: discord.Member):
+    clear_strikes(member.id)
+    await ctx.send(
+        f"🧹 Record cleared for {member.mention} | تم مسح السجل"
+    )
 
 # ================= RUN =================
 TOKEN = os.getenv("DISCORD_TOKEN")
-
 if not TOKEN:
     print("ERROR: DISCORD_TOKEN not found in Environment Variables")
     exit(1)
