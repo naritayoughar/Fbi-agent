@@ -53,10 +53,13 @@ async def on_message(message):
         audio_file = random.choice(CFG["audio_files"])
 
         # إرسال التحذير الصوتي
-        await message.channel.send(
-            f"⚠️ مخالفة مسجلة | Strikes: {strikes}",
-            file=discord.File(audio_file)
-        )
+        try:
+            await message.channel.send(
+                f"⚠️ مخالفة مسجلة | Strikes: {strikes}",
+                file=discord.File(audio_file)
+            )
+        except Exception as e:
+            print(f"Error sending audio: {e}")
 
         # إرسال التقرير لقناة الأمن
         sec = discord.utils.get(
@@ -75,13 +78,16 @@ async def on_message(message):
             )
 
         # تنفيذ العقوبة
-        if penalty == "BAN":
-            await message.guild.ban(message.author, reason="Auto moderation | FBI AGENT")
-        else:
-            await message.author.timeout(
-                timedelta(seconds=int(penalty)),
-                reason="Auto moderation | FBI AGENT"
-            )
+        try:
+            if penalty == "BAN":
+                await message.guild.ban(message.author, reason="Auto moderation | FBI AGENT")
+            else:
+                await message.author.timeout(
+                    timedelta(seconds=int(penalty)),
+                    reason="Auto moderation | FBI AGENT"
+                )
+        except Exception as e:
+            print(f"Error applying penalty: {e}")
 
 # ================= COMMANDS =================
 @bot.command()
