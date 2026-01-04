@@ -1,0 +1,16 @@
+{
+  "security_channel": "security-files",
+  "audio_urls": [
+    "https://raw.githubusercontent.com/naritayoughar/Fbi-agent/main/audio/warn_01.mp3",
+    "https://raw.githubusercontent.com/naritayoughar/Fbi-agent/main/audio/warn_02.mp3",
+    "https://raw.githubusercontent.com/naritayoughar/Fbi-agent/main/audio/warn_03.mp3"
+  ],
+  "penalties": [600, 1800, 3600, 10800, 21600, "BAN"],
+  "keywords": [
+    "كسمك","كسختك","كسك","كس","زب","زبك","طيزك","كلخرا","كل خرا","كل زق","زق",
+    "كس امك","كس اختك","نيك","نيكك","منيك","منتاك","منيوك","عرص","عرصا",
+    "شرموطة","كحبة","قحبة","عير","اير","انيك","مص","امصصك","بزاز","بز",
+    "تيز","تيزك","سحاق","لواط","لوطي","لوطيين","لواطة","مخانيث","مخنث",
+    "fuck","blowjob","dick","tits","boobs","nude","gay","lesbian","femboy","ابن مرا"
+  ]
+}
