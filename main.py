@@ -99,7 +99,7 @@ async def reset(ctx, member: discord.Member):
 # ================= RUN =================
 TOKEN = os.getenv("DISCORD_TOKEN")
 if not TOKEN:
-    print("ضع التوكن في Environment Variable باسم DISCORD_TOKEN")
+    print("MTQ1NzIxMTc1ODUzOTE4MjEyMQ.G03C1v.KlQRXqVUUhpawAKHmdGT7nnBLHn9v2OCFcdm4Y")
     exit(1)
 
 bot.run(TOKEN)
